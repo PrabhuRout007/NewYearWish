@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Year 2025 Celebration</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: linear-gradient(135deg, #000428, #004e92);
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            color: white;
+            touch-action: none;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+        }
+
+        #clock {
+            font-size: min(120px, 20vw);
+            color: #FFD700;
+            transition: transform 0.5s;
+            margin: 20px;
+            filter: drop-shadow(0 0 10px gold);
+        }
+
+        #hammer {
+            font-size: min(80px, 15vw);
+            color: silver;
+            position: absolute;
+            cursor: pointer;
+            transform-origin: bottom right;
+            z-index: 10;
+            filter: drop-shadow(0 0 5px rgba(255,255,255,0.7));
+            touch-action: none;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .instruction {
+            font-size: min(1.5em, 5vw);
+            color: #FF69B4;
+            text-shadow: 0 0 5px rgba(255,105,180,0.5);
+            margin-bottom: 20px;
+            font-family: 'Dancing Script', cursive;
+            animation: pulse 2s infinite;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .message {
+            font-family: 'Dancing Script', cursive;
+            font-size: min(4em, 10vw);
+            text-align: center;
+            position: absolute;
+            width: 100%;
+            opacity: 0;
+            top: 20%;
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            filter: drop-shadow(0 0 10px rgba(255,215,0,0.5));
+            padding: 0 20px;
+        }
+
+        #quote {
+            font-family: 'Dancing Script', cursive;
+            font-size: min(2em, 6vw);
+            text-align: center;
+            margin: 20px;
+            opacity: 0;
+            position: absolute;
+            top: 50%;
+            background: linear-gradient(45deg, #FF69B4, #FFB6C1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 8px rgba(255,105,180,0.5));
+            padding: 0 20px;
+            width: 100%;
+            transform: translateY(-50%);
+        }
+
+        .signature {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: min(1.5em, 5vw);
+            font-family: 'Dancing Script', cursive;
+            color: #FFD700;
+            text-shadow: 0 0 5px gold;
+            animation: glow 2s infinite;
+        }
+
+        .audio-control {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .audio-control:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .audio-control i {
+            color: white;
+            font-size: 24px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-20px); }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes glow {
+            0% { text-shadow: 0 0 5px gold; }
+            50% { text-shadow: 0 0 20px gold, 0 0 30px orange; }
+            100% { text-shadow: 0 0 5px gold; }
+        }
+
+        #fireworksCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            touch-action: none;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            width: 100%;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="audio-control" id="audioControl">
+        <i class="fas fa-volume-up"></i>
+    </div>
+
+    <audio id="hitSound" preload="auto">
+        <source src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3" type="audio/mp3">
+    </audio>
+    
+    <audio id="celebrationMusic" loop preload="auto">
+        <source src="./music.mp3" type="audio/mp3">
+    </audio>
+
+    <canvas id="fireworksCanvas"></canvas>
+    
+    <div class="container">
+        <h1 id="byeMessage" class="message">✨ Bye Bye 2024 ✨</h1>
+        <div id="instruction" class="instruction">🎯 Hit the clock with the hammer! 🎯</div>
+        <i id="clock" class="fas fa-clock"></i>
+        <i id="hammer" class="fas fa-hammer"></i>
+    </div>
+    
+    <div id="quote"></div>
+    <div class="signature">~ Prabhu Rout ✨</div>
+
+    <script>
+        // Initialize elements
+        const hammer = document.getElementById('hammer');
+        const clock = document.getElementById('clock');
+        const quote = document.getElementById('quote');
+        const byeMessage = document.getElementById('byeMessage');
+        const instruction = document.getElementById('instruction');
+        const hitSound = document.getElementById('hitSound');
+        const celebrationMusic = document.getElementById('celebrationMusic');
+        const audioControl = document.getElementById('audioControl');
+        const audioIcon = audioControl.querySelector('i');
+
+        let isDragging = false;
+        let currentX;
+        let currentY;
+        let initialX;
+        let initialY;
+        let xOffset = 0;
+        let yOffset = 0;
+        let isMuted = false;
+
+        const quotes = [
+            "✨ May your dreams take flight in 2025! ✨",
+            "🌟 Wishing you 365 days of joy and success! 🌟",
+            "💫 Here's to new beginnings and endless possibilities! 💫",
+            "🎉 May every day sparkle with happiness! 🎉"
+        ];
+
+        const canvas = document.getElementById('fireworksCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Firework {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height;
+                this.targetY = Math.random() * canvas.height/2;
+                this.speed = 2;
+                this.particles = [];
+                this.exploded = false;
+            }
+
+            update() {
+                if (!this.exploded) {
+                    this.y -= this.speed;
+                    if (this.y <= this.targetY) {
+                        this.explode();
+                    }
+                }
+                
+                this.particles.forEach((particle, index) => {
+                    particle.x += particle.vx;
+                    particle.y += particle.vy;
+                    particle.vy += 0.1;
+                    particle.alpha -= 0.01;
+                    
+                    if (particle.alpha <= 0) {
+                        this.particles.splice(index, 1);
+                    }
+                });
+
+                if (this.exploded && this.particles.length === 0) {
+                    this.reset();
+                }
+            }
+
+            explode() {
+                this.exploded = true;
+                for (let i = 0; i < 50; i++) {
+                    const angle = (Math.PI * 2 * i) / 50;
+                    const speed = Math.random() * 3 + 2;
+                    this.particles.push({
+                        x: this.x,
+                        y: this.y,
+                        vx: Math.cos(angle) * speed,
+                        vy: Math.sin(angle) * speed,
+                        alpha: 1,
+                        color: `hsl(${Math.random() * 360}, 70%, 60%)`
+                    });
+                }
+            }
+
+            draw() {
+                if (!this.exploded) {
+                    ctx.fillStyle = 'white';
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                this.particles.forEach(particle => {
+                    ctx.globalAlpha = particle.alpha;
+                    ctx.fillStyle = particle.color;
+                    ctx.beginPath();
+                    ctx.arc(particle.x, particle.y, 2, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+                ctx.globalAlpha = 1;
+            }
+        }
+
+        const fireworks = Array(5).fill().map(() => new Firework());
+
+        function animate() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            fireworks.forEach(firework => {
+                firework.update();
+                firework.draw();
+            });
+            
+            requestAnimationFrame(animate);
+        }
+
+        audioControl.addEventListener('click', () => {
+            isMuted = !isMuted;
+            hitSound.muted = isMuted;
+            celebrationMusic.muted = isMuted;
+            audioIcon.className = isMuted ? 'fas fa-volume-mute' : 'fas fa-volume-up';
+        });
+
+        function initAudio() {
+            hitSound.play().then(() => {
+                hitSound.pause();
+                hitSound.currentTime = 0;
+            }).catch(err => console.log('Audio init failed:', err));
+            
+            celebrationMusic.play().then(() => {
+                celebrationMusic.pause();
+                celebrationMusic.currentTime = 0;
+            }).catch(err => console.log('Audio init failed:', err));
+            
+            document.removeEventListener('click', initAudio);
+        }
+        document.addEventListener('click', initAudio);
+
+        hammer.addEventListener('mousedown', dragStart);
+        hammer.addEventListener('touchstart', dragStart);
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('touchmove', drag);
+        document.addEventListener('mouseup', dragEnd);
+        document.addEventListener('touchend', dragEnd);
+
+        function getPosition(event) {
+            if (event.type.includes('mouse')) {
+                return {
+                    x: event.clientX,
+                    y: event.clientY
+                };
+            } else {
+                return {
+                    x: event.touches[0].clientX,
+                    y: event.touches[0].clientY
+                };
+            }
+        }
+
+        function dragStart(e) {
+            e.preventDefault();
+            const position = getPosition(e);
+            initialX = position.x - xOffset;
+            initialY = position.y - yOffset;
+            isDragging = true;
+        }
+
+        function drag(e) {
+            if (isDragging) {
+                e.preventDefault();
+                const position = getPosition(e);
+                currentX = position.x - initialX;
+                currentY = position.y - initialY;
+                xOffset = currentX;
+                yOffset = currentY;
+                setTranslate(currentX, currentY, hammer);
+            }
+        }
+
+        function dragEnd(e) {
+            if (isDragging) {
+                isDragging = false;
+                const clockRect = clock.getBoundingClientRect();
+                const hammerRect = hammer.getBoundingClientRect();
+                
+                if (isColliding(clockRect, hammerRect)) {
+                    breakClock();
+                }
+            }
+        }
+
+        function setTranslate(xPos, yPos, el) {
+            el.style.transform = `translate(${xPos}px, ${yPos}px) rotate(${xPos * 0.2}deg)`;
+        }
+
+        function isColliding(rect1, rect2) {
+            return !(rect1.right < rect2.left || 
+                    rect1.left > rect2.right || 
+                    rect1.bottom < rect2.top || 
+                    rect1.top > rect2.bottom);
+        }
+
+        function breakClock() {
+            clock.style.transform = 'scale(0) rotate(360deg)';
+            hammer.style.display = 'none';
+            byeMessage.style.display = 'none';
+            instruction.style.animation = 'fadeOut 0.5s forwards';
+            
+            hitSound.currentTime = 0;
+            hitSound.play().catch(err => console.log('Hit sound failed:', err));
+            
+            setTimeout(() => {
+                instruction.style.display = 'none';
+                showNewYearMessage();
+                animate();
+                
+                celebrationMusic.currentTime = 0;
+                celebrationMusic.play().catch(err => console.log('Celebration music failed:', err));
+            }, 1000);
+        }
+
+        function showNewYearMessage() {
+            const newYearMessage = document.createElement('h1');
+            newYearMessage.className = 'message';
+            newYearMessage.innerHTML = '✨ Happy New Year 2025! ✨';
+            newYearMessage.style.animation = 'fadeIn 2s forwards, float 3s infinite';
+            document.body.appendChild(newYearMessage);
+            
+            showQuotes();
+        }
+
+        function showQuotes() {
+            let index = 0;
+            quote.style.opacity = 1;
+            quote.style.animation = 'fadeIn 2s forwards, float 3s infinite';
+            
+            setInterval(() => {
+                quote.textContent = quotes[index];
+                index = (index + 1) % quotes.length;
+            }, 3000);
+        }
+
+        byeMessage.style.opacity = 1;
+        byeMessage.style.animation = 'fadeIn 2s forwards';
+
+        document.addEventListener('touchmove', function(e) {
+            e.preventDefault();
+        }, { passive: false });
+
+        window.addEventListener('beforeunload', () => {
+            celebrationMusic.pause();
+            hitSound.pause();
+        });
+    </script>
+</body>
+</html>
